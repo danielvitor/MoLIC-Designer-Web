@@ -1,0 +1,7 @@
+bootstrap-transition.js v2.1.1
+
+Font Awesome 2.0
+
+KineticJS JavaScript Library v4.0.1
+
+jQuery JavaScript Library v1.8.2

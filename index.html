@@ -1,20 +1,150 @@
-<!DOCTYPE HTML>
-<html>
+	<!DOCTYPE HTML>
+<html lang="en">
   <head>
-	<link rel="stylesheet" href="css/normalize.css">
-	<link rel="stylesheet" href="css/main.css">
-    <script src="libs/kinetic-v4.0.1.js"></script>
-	<script src="js/poc-01.js"></script>
-	<title>MoLIC Designer</title>
+
+		<script src="vendor/jquery/jquery.js"></script>
+		<script src="vendor/jquery/jquery.layout.js"></script>
+
+	<!-- Bootstrap -->
+		<link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Kinetic -->
+		<script src="vendor/kinetic/kinetic.js"></script>
+
+	<!-- diagram-example -->
+		<script src="data/molic_v0.js"></script>
+		<script src="data/molic_v1.js"></script>
+
+
+	<!-- diagram-module -->
+
+		<!-- Dependency -->
+			<script src="vendor/kinetic/kinetic.js"></script>
+
+		<!-- module files -->
+		<script src="js/md/diagram/MoLICDesigner.js"></script>
+		<script src="js/md/diagram/scene.js"></script>
+		<script src="js/md/diagram/startPoint.js"></script>
+		<script src="js/md/diagram/ubiquitousAccess.js"></script>
+		<script src="js/md/diagram/utterance.js"></script>
+		<script src="js/md/diagram/systemProcess.js"></script>
+
+
+	<!-- nlg-module -->
+		<!-- dependency -->
+		<script src="vendor/jquery/jquery.jbind-1.5.8.js"></script>
+		<!-- module files -->
+		<script src="js/nlg/nlg.js"></script>	
+		
+	<!-- specific definitions -->
+		<link href="css/main.css" rel="stylesheet">
+		<script src="js/main.js"></script>
+	
+ 	<title>MoLIC Designer</title>
   </head>
   <body>
-	<header>
-		<h1 id="md-title">MoLIC Designer</h1>
-	</header>
-	<aside id="md-toolbar"></aside>
-	<section id="md-workbench">
-		
-	</section>
-  </body>
-  
+
+
+  	<div class="ui-layout-center">
+    <div class="page-header">
+      <h1 id="diagram_name">Diagram v0</h1>
+    </div>
+		<div id="graph-area" class="ui-layout-content">
+			
+		</div>
+	</div>
+		<div id="header" class="navbar navbar-fixed-top navbar-inverse ui-layout-north">
+			<div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="index.html">MoLIC Designer</a>
+          <ul class="nav pull-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select a Diagram <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="active" ><a id="diagram_v0"     class="diagram_selector" href="#">Diagram v0</a></li>
+              	<li><a id="diagram_v1" class="diagram_selector" href="#">Diagram v1</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+			</div>
+    </div>
+		<div class="ui-layout-east">
+
+
+
+			<form id="nlg-form" name="nlg-form">
+			  <fieldset>
+			    <legend>NLG Module</legend>
+				<label>Speech <em>(tactical detail)</em></label>
+			    <label class="radio">
+				  <input type="radio" name="speech-options" id="" value="scene-list" checked>
+				  What do we must detail? 
+				</label>
+				<label class="radio">
+				  <input type="radio" name="speech-options" id="tactical-template" value="tactical-template">
+				  What can user do?
+				</label>
+			    <a id= "nlg-generate" role="button" class="btn" >Generate</a>
+			  </fieldset>
+			</form>
+        	<div id="nlg-area" >
+
+
+        	</div>
+		</div>
+
+
+
+		<!--div id="header" class="navbar navbar-fixed-top navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+				  <a class="brand" href="index.html">MoLIC Designer</a>
+				  <div class="btn-group pull-right">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					  		<i class="icon-user"></i> danielvitor
+					  		<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Profile</a></li>
+					  		<li><a href="#">Settings</a></li>
+					  		<li class="divider"></li>
+					  		<li><a href="login.html">Logout</a></li>
+						</ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row-fluid">
+	    		<div class="span2">
+		      		<div id="nlg-area" class="container-fluid" style="margin-top:50px;">
+			  		</div>
+	    		</div>
+		    	<div class="span10" id="main-content" >
+					<ul class="breadcrumb">
+						<li><a href="#">MoLIC Designer</a> <span class="divider">/</span></li>
+						<li><a href="#">My Project</a> <span class="divider">/</span></li>
+						<li class="active">My first Model</li>
+					</ul>
+					<div id="graph-area" class="container-fluid" >
+					</div>
+				</div>
+			</div>
+		</div-->
+		<div id="nlg-templates" style="display:none;">
+			<div class="scene-list-template" >
+			<p>
+				The scenes that must be detailed:
+				<!--data-->
+						<span class="articulated-list">
+							<a id="point-to-{id}" href="javacript:void(0)" class=" list-item concept-pointer">{topic}</a>
+						</span>
+				<!--data-->
+			</p>
+			</div>
+		</div>
+			
+ </body>  
 </html>

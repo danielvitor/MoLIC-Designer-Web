@@ -1,0 +1,13 @@
+#graph-area{
+	padding:0;
+	overflow: scroll;
+}
+
+#nlg-area .concept-pointer{
+	cursor: pointer;
+	background-color: "blue";
+}
+
+#nlg-area {
+	margin-top: 40px;
+}
