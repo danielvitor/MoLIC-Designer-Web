@@ -1,0 +1,23 @@
+jsdoc-toolkit
+jsdoc-master
+dist
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.sublime-project
+*.sublime-workspace
+
+todo-list
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+intermediate
+publish
+.idea
