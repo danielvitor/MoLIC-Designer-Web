@@ -2,7 +2,9 @@
  
     // constants
     var 
-        SCENE = 'Scene';
+        SCENE = 'Scene',
+        WIDTH = 120,
+        HEIGHT = 60;
         
 
     /**
@@ -24,6 +26,7 @@
     MoLIC.Scene = function(config) {
         this._initScene(config);
         this._draw();
+        this._bind();
     };
 
     MoLIC.Scene.prototype = {
@@ -33,15 +36,17 @@
 
             config.draggable = true;
 
-            // call super constructor
-            Kinetic.Group.call(this, config);
 
+            this.x = config.x;
+            this.y = config.y;
             this.name = config.name;
             this.text = null;
             this.border = null;
-            this.width = 200;
-            this.height = 100;
-            this.isPortVisible = false;
+            this.width = WIDTH;
+            this.height = HEIGHT;
+
+            // call super constructor
+            Kinetic.Group.call(this, config);
             
         },
 
@@ -54,13 +59,16 @@
                 y:        10,
                 width:    this.width - 20,
                 height:   this.height,
-                align:    'center',
                 fontSize: 14,
-                stroke:   '#555'
+                fontFamily: 'Calibri',
+                stroke:   '#222',
+                strokeWidth: 1
             });
 
             this.border = new Kinetic.Rect({
 
+                x:             0,
+                y:             0,
                 fill:          '#fff',
                 width:         this.width,
                 height:        this.height,
@@ -72,57 +80,74 @@
             this.add(this.border);
             this.add(this.text);
             
-            this._drawPoints();
-
-            this.displayPorts( this.isPortVisible );
+            this._drawPorts();
         },
 
-        _drawPoints: function(){
+        _bind: function(){
+
+
+            this.on("dragmove", function(e){
+
+                // notify ports
+                this.getPort(LEFT).notify("dragmove");
+                this.getPort(TOP).notify("dragmove");
+                this.getPort(RIGHT).notify("dragmove");
+                this.getPort(BOTTOM).notify("dragmove");
+
+            });
+        },
+        
+        _drawPorts: function(){
             this.points = MoLIC.Util.getInnerPoints(this);
 
             this.ports = {
-                top:   this._drawSinglePoint(this.points.top),
-                bottom:this._drawSinglePoint(this.points.bottom),
-                left:  this._drawSinglePoint(this.points.left),
-                right: this._drawSinglePoint(this.points.right)
+                TOP:   this._createPort(this.points.TOP),
+                BOTTOM:this._createPort(this.points.BOTTOM),
+                LEFT:  this._createPort(this.points.LEFT),
+                RIGHT: this._createPort(this.points.RIGHT)
             };
 
             // add them to group
             for(index in this.points) { 
-                var pos = this.ports[index];
-                this.add(pos);
+                var port = this.ports[index];
+                this.add(port);
             }
 
         },
 
-        _drawSinglePoint: function(position){
-            return new Kinetic.Circle({
-                x: position.x,
-                y: position.y,
-                fill: '#333',
-                radius: 4
+        getPort: function(which){
+            return this.ports[which];
+
+        },
+
+        _createPort: function(position){
+            return MoLIC.createPort({
+                'shape': this,
+                'position': position,
+                visible: true
             });
         },
 
-        displayPorts: function(flag){
-        
-            // flag default = true
-
-            this.isPortVisible = flag; 
+        displayPorts: function(show){
 
             for(index in this.points) { 
-                var pos = this.ports[index];
+                var port = this.ports[index];
                 
-                if(flag === false)
-                {
-                    pos.hide();
+                if(!show){
+                    port.hide();
                 }
                 else
                 {
-                    pos.show();
+                    port.show();
                 }
+                
             }
+            this.refresh();
 
+        },
+
+        refresh: function(){
+            this.getStage().draw();
         }
     };
     
@@ -131,9 +156,9 @@
         // add getters setters
     Kinetic.Node.addGetterSetter(MoLIC.Scene, 'name', 'No name');
 
-    Kinetic.Node.addGetterSetter(MoLIC.Scene, 'height', 100);
+    Kinetic.Node.addGetterSetter(MoLIC.Scene, 'height', HEIGHT);
     
-    Kinetic.Node.addGetterSetter(MoLIC.Scene, 'width', 200);
+    Kinetic.Node.addGetterSetter(MoLIC.Scene, 'width', WIDTH);
 
     /**
      * set scene name function 

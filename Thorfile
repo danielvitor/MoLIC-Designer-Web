@@ -8,11 +8,14 @@ class Build < Thor
     "src/diagram/Global.js", 
     "src/diagram/Util.js", 
     "src/diagram/elements/Element.js", 
+    "src/diagram/elements/Port.js",
     "src/diagram/elements/Scene.js", 
     "src/diagram/elements/OpeningPoint.js",
     "src/diagram/elements/ClosingPoint.js",
     "src/diagram/elements/UbiquitousAccess.js",
-    "src/diagram/elements/SystemProcessing.js"
+    "src/diagram/elements/SystemProcessing.js",
+    "src/diagram/elements/Connection.js",
+    "src/diagram/elements/Utterance.js"
   ]
   
 
@@ -21,7 +24,9 @@ class Build < Thor
     "tests/js/unit/openingPointTests.js",
     "tests/js/unit/closingPointTests.js",
     "tests/js/unit/ubiquitousAccessTests.js",
-    "tests/js/unit/systemProcessingTests.js"
+    "tests/js/unit/systemProcessingTests.js",
+    "tests/js/unit/utteranceTests.js"
+      
  ]
 
 

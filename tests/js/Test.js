@@ -23,6 +23,16 @@ function test(condition, message, warn) {
     testCounter.innerHTML = numTests;
 }
 
+function showLineInMoLICStage(x,y){
+
+    var layer = new Kinetic.Layer();
+
+    showLine(layer,x,y);
+
+    MoLIC.addToStage(layer);
+}
+
+
 
 function showLine(layer,x,y){
 
@@ -54,6 +64,7 @@ function showLine(layer,x,y){
     layer.add(point);
 
 } 
+
 
 function warn(condition, message) {
     if(!condition) {
