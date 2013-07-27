@@ -1,10 +1,12 @@
 
 /**
+
 MoLIC module that declares MoLIC language elements like scenes, utterances and so on.
-Actually, this is built as submodule of KinecticJS framework, creating groups of shapes with meanings and behaviors.
+Actually, it is a submodule of KinecticJS framework, creating groups of shapes that represents MoLIC's shapes.
 
 @module MoLIC
 @main MoLIC
+
 **/
 var MoLIC = {};
 
@@ -27,8 +29,16 @@ var MoLIC = {};
 
 	}
 
+	MoLIC.getStage = function() {
+		return MoLIC.stage;
+	}
+
     MoLIC.addToStage = function(layer){
 	 	MoLIC.stage.add(layer);
+ 	}
+
+ 	MoLIC.promptForText = function(shape, text){
+
  	}
 
  	MoLIC.autoDrag = function(conn){
@@ -62,12 +72,35 @@ var MoLIC = {};
 				// start dragging the new object
 				MoLIC.stage.on("mousemove", function(e){
 
-	 				MoLIC.autoDragging.setPosition(MoLIC.stage.getMousePosition());
+	 				MoLIC.autoDragging.setCenterPosition(MoLIC.stage.getMousePosition());
 	 				//console.log('now conn is at '+MoLIC.autoDragging.getX()+", "+MoLIC.autoDragging.getY());
 	 				conn.refresh();
 				});
 			}
  		}
+ 	}
+
+
+ 	MoLIC.showAllPorts = function(){
+		var port, i;
+		for( i = MoLIC.ports.length-1; i >= 0 ; i--){
+		    port = MoLIC.ports[i];
+		    port.show();
+		}
+
+		MoLIC.drawStage();
+
+ 	}
+
+ 	MoLIC.hideAllPorts = function(){
+		var port, i;
+		for( i = MoLIC.ports.length-1; i >= 0 ; i--){
+		    port = MoLIC.ports[i];
+		    port.hide();
+		}
+
+		MoLIC.drawStage();
+ 		
  	}
 
  	MoLIC.getIntersection = function(pos){
@@ -126,13 +159,15 @@ var MoLIC = {};
 
 		if(config.sourcePort){
 			from = MoLIC.addConnection({
-				port: config.sourcePort
+				port: config.sourcePort,
+				type: "source"
 			});
 		}
 
 		if(config.targetPort){
 			to = MoLIC.addConnection({
-				port: config.targetPort
+				port: config.targetPort,
+				type: "target"
 			});
 		}
 
@@ -151,12 +186,16 @@ var MoLIC = {};
 		});
 
 		
-		from.setTransition(aUtterance);
-		to.setTransition(aUtterance);
+		//from.setTransition(aUtterance);
+		//to.setTransition(aUtterance);
 
 		layer.add(aUtterance);
-
 		MoLIC.addToStage(layer);
+
+
+        from.getLayer().moveToTop();
+        to.getLayer().moveToTop();
+
 
 		return aUtterance;
 	}
@@ -182,12 +221,19 @@ var MoLIC = {};
 	}
 
 
+	MoLIC.addToNewLayer = function(shape){
+		
+		var layer = MoLIC.getValidLayer(null);
 
+		layer.add(shape);
+		MoLIC.addToStage(layer);
+
+		return layer;	
+	}
 
 	MoLIC.createPort = function(config){
 
 		// port are added by shapes
-
 		var aPort = new MoLIC.Port(config);
 
 		MoLIC.ports.push(aPort);

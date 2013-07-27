@@ -2,29 +2,45 @@
  
     // constants
     var 
+
+
         PORT = 'Port',
-        WIDTH = 10,
-        HEIGHT = 10,
+
+        /**
+        Port width and height are set to 10
+
+        @attribute SIZE
+        @type Number
+        @default 10
+        @readOnly
+        **/
+        SIZE = 10
+
+        /**
+        Port color
+        @attribute FILL
+        @type String ("#RGB")
+        @default "#333"
+        @readOnly
+        **/
         FILL = "#333",
-        HIGHLIGHT = "#999",
-        SIZE = 10;
+        
+        /**
+        Port highlight color
+        @attribute HIGHLIGHT
+        @type String ("#RGB")
+        @default "#999"
+        @readOnly
+        **/
+        HIGHLIGHT = "#999";
         
     /**
      * Port constructor
+        a port instance knows it's connections (for details, see {{#crossLink "Connection"}}{{/crossLink}}) and parent shape. 
+     * @class Port
      * @constructor
-     * @memberof MoLIC
-     * @augments MoLIC.Port
-     * @param {Object} config
-     * @param {Object} config.element
-     * @param {Object} config.position
-     * {{ShapeParams}}
-     * {{NodeParams}}
-     * @example
-     * var shapePort = new MoLIC.Port({<br>
-     *   shape: scene,
-         position: {x: 10, y: 5, name: TOP}
-          <br>
-     * });
+     * @namespace MoLIC
+     * @uses Kinetic.Group
      */
     MoLIC.Port = function(config) {
         this._initPort(config);
@@ -33,7 +49,38 @@
 
     };
 
+
+
     MoLIC.Port.prototype = {
+
+        /**
+            Port's parent shape. Every shape that can be connected to other may have one or many ports. 
+            @property shape 
+            @type Object (any MoLIC Shape)
+        */
+
+        /**
+            List of connections connected to this port. Can be changed by {{#crossLink "Port:addConnection:method"}}{{/crossLink}} and {{#crossLink "Port:removeConnection:method"}}{{/crossLink}}
+            @property connections
+            @default []
+            @type Array 
+        */
+
+        /**
+        Init Port with configuration object
+        * 
+        * @method _initPort
+        * @param {Object} config
+        * @param {Object} config.element
+        * @param {Object} config.position
+        * @protected
+        * @example
+                var aPortFromScene = new MoLIC.Port({<br>
+                    shape: scene,
+                    position: {x: 10, y: 5, name: TOP}
+                <br>
+                });
+        **/
         _initPort: function(config) {
 
             this.className = PORT;
@@ -42,8 +89,8 @@
             this.connections = [];
 
             config.draggable = false;
-            config.width = WIDTH;
-            config.height = HEIGHT;
+            config.width = SIZE;
+            config.height = SIZE;
 
 
             this.position = config.position;
@@ -59,9 +106,16 @@
             // call super constructor
             Kinetic.Group.call(this, config);
 
+            this.hide();
             this.rect = null;
 
         },
+
+        /**
+        * private method that draws a Port instance
+        * @method _draw
+        * @memberof MoLIC.Port.prototype
+        */
 
         _draw: function() {
 
@@ -76,16 +130,30 @@
             this.add(this.rect);
         },
 
+
+        /**
+        * private method that binds events to this Port instance 
+        * @method _bind
+        * @memberof MoLIC.Port.prototype
+        */
         _bind: function() {
-            this.on("mouseover", function(){
-                console.log(this+" 'there is something over me' ");
-            });
         },
 
-        addConnection: function(conn){
-            this.connections.push(conn);
+
+        /**
+        * A Port intance keeps any connection's intance connected to it. This method adds a connection from Port instance.
+        * @method removeConnection
+        * @param {Object} connToRemove
+        */
+        addConnection: function(connToAdd){
+            this.connections.push(connToAdd);
         },
 
+        /**
+        * A Port intance keeps any connection's intance connected to it. This method removes a connection from Port instance.
+        * @method removeConnection
+        * @param {Object} connToRemove
+        */
         removeConnection: function(connToRemove){
 
             var conn, i;
@@ -97,20 +165,31 @@
                 }
             }
 
-
         },
 
-        notify: function(){
+        /**
+        * notify events
+        * @method notify
+        * @param {String} event
+        * @beta
+        */
+        notify: function(event){
 
-            var conn, i;
-            for( i = this.connections.length-1; i >= 0 ; i--){
-                conn = this.connections[i];
-                conn.setPort(this);
+
+            if(event == "dragmove"){
+                var conn, i;
+                for( i = this.connections.length-1; i >= 0 ; i--){
+                    conn = this.connections[i];
+                    conn.setPort(this);
+                }
             }
-
         },
 
-
+        /**
+        * get absolute center of a Port's instance. It considers parent shape absolute position to calculate port position.
+        * @method getAbsoluteCenter
+        * @return {Object} position (x,y)
+        */
         getAbsoluteCenter: function(){
             
             var absCenter = {};
@@ -131,24 +210,22 @@
         }
     };
     
+
     Kinetic.Util.extend(MoLIC.Port, Kinetic.Group);
 
 
     Kinetic.Node.addGetterSetter(Kinetic.Group, 'shape');
 
     /**
-     * set shape function 
-     * @name setShape
-     * @method
-     * @memberof MoLIC.Port.prototype
+     * set parent shape function 
+     * @method setShape
      * @param {Object} shape
      */
 
     /**
-     * get shape function 
-     * @name getShape
-     * @method
-     * @memberof MoLIC.Port.prototype
+     * get parent shape function
+     * @method getShape
+     * @return {Object} shape
      */
 
 })();

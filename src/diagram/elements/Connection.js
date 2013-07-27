@@ -5,26 +5,31 @@
         CONNECTION = 'Connection',
         WIDTH = 10,
         HEIGHT = 10,
-        FILL = "#800",
-        HIGHLIGHT = "#222",
+        FILL = "#000",
+        HIGHLIGHT = "#600",
+        HOVER = HIGHLIGHT,
         SIZE = 10;
         
     /**
-     * Port constructor
+     * Connection constructor
      * @constructor
      * @memberof MoLIC
-     * @augments MoLIC.Connection
+     * @augments Kinetic.Group
      * @param {Object} config
      * @param {Object} config.element
      * @param {Object} config.position
      * {{ShapeParams}}
      * {{NodeParams}}
      * @example
-     * var shapePort = new MoLIC.Connection({<br>
-     *   transition: scene,
-         position: {x: 10, y: 5, name: TOP}
-          <br>
-     * });
+     * var aConnectionFromPosition = new MoLIC.Connection({<br>
+         position: {x: 10, y: 5}<br>
+     * }); <br>
+     * or <br>
+     * var aConnectionFromPort = new MoLIC.Connection({<br>
+         port: aPortInstance<br>
+     * }); <br>
+     * 
+     *
      */
     MoLIC.Connection = function(config) {
         this._initConnection(config);
@@ -61,14 +66,20 @@
             config.x = this.x;
             config.y = this.y;
 
+
             // call super constructor
             Kinetic.Group.call(this, config);
 
             this.setDraggable(true);
-
             this.rect = null;
         },
 
+        /**
+        * private method that draws a Connection instance 
+        * @name _draw
+        * @method
+        * @memberof MoLIC.Connection.prototype
+        */
         _draw: function() {
 
             this.rect =  new Kinetic.Rect({
@@ -78,81 +89,78 @@
                 width: SIZE,
                 height: SIZE
             });
+            /*
+            else if(this.type === "target"){
+                this.rect = new Kinetic.Shape({
+                    drawFunc: function(canvas) {
+                      var context = canvas.getContext();
+                      context.beginPath();
+                      context.moveTo(toX, toY);
+                      context.lineTo(toX-headlen*Math.cos(angle-Math.PI/6), toY-headlen*Math.sin(angle-Math.PI/6));
+                      context.lineTo(toX-headlen*Math.cos(angle+Math.PI/6), toY-headlen*Math.sin(angle+Math.PI/6));
+                      context.lineTo(toX, toY);
+                      context.closePath();
+                      canvas.fillStroke(this);
+                    },
+                    fill: '#00D2FF',
+                    stroke: 'black',
+                    strokeWidth: 4
+                });
+            }*/
 
+    
             this.add(this.rect);
         },
 
+        /**
+        * private method that binds events to a Connection instance 
+        * @name _draw
+        * @method
+        * @memberof MoLIC.Connection.prototype
+        */
         _bind: function(){
+
             this.on("mouseenter", function(e){
-                console.log(this);
-                this.rect.setFill(HIGHLIGHT);
-                this.getLayer().draw();
+                this.setHightlight(true);
             });
 
             this.on("mouseleave", function(e){
-                this.rect.setFill(FILL);
-                this.getLayer().draw();
+                this.setHightlight(true);
             });
+
+            this.on("dragstart", function(e){
+
+                MoLIC.showAllPorts();
+            });            
 
             this.on("dragend", function(e){
-                console.log("lets find some ports");
 
                 var newPort = MoLIC.getPortNear(this);
-                if(  newPort ){
-                    console.log("ACHEIIIIIIIIIIIIIIIIIIIII");
 
-                    this.setPort(newPort);
-                }
-                else{
-                    this.setPort(null);
+                // newPort can be null
+                this.setPort(newPort);
 
-                    // unbind connection to port
-                    // remove conn from list of connections in port
-
-                }
-                /*
-                var points = {
-                    topLeft: { 
-                        x: this.getAbsolutePosition().x,
-                        y: this.getAbsolutePosition().y
-                    },
-                    topRight:  { 
-                        x: this.getAbsolutePosition().x + SIZE,
-                        y: this.getAbsolutePosition().y
-                    },
-                    bottomLeft: { 
-                        x: this.getAbsolutePosition().x,
-                        y: this.getAbsolutePosition().y + SIZE
-                    },
-                    bottomRight: { 
-                        x: this.getAbsolutePosition().x + SIZE,
-                        y: this.getAbsolutePosition().y + SIZE
-                    }
-                };
-
-                */
-
-
-                //console.log( MoLIC.getIntersection(points.topLeft).getParent() );
-
-            });
-
-            this.on("dblclick", function(e){
-                MoLIC.autoDrag(this);
+                MoLIC.hideAllPorts();
             });
 
         },
 
+
+        /**
+        * Connection are dragged around stage in order to find Port to connect. this method  This method adds a connection from Port instance.
+        * @name removeConnection
+        * @method
+        * @memberof MoLIC.Port.prototype
+        * @param {Object} shape
+        * @return {Boolean} isNear 
+        */
         isNear: function(shape){
 
             
             var shapeX = shape.getAbsolutePosition().x,
                 shapeY = shape.getAbsolutePosition().y,
-                connX = this.getAbsolutePosition().x,
-                connY = this.getAbsolutePosition().y;
-            
-            console.log("shape ("+shapeX+","+shapeY+")");
-            console.log("conn  ("+connX+","+connY+")");
+                connX  =  this.getAbsolutePosition().x,
+                connY  =  this.getAbsolutePosition().y;
 
             if(connX > shapeX - SIZE && connX < shapeX + SIZE && connY > shapeY - SIZE && connY < shapeY + SIZE) {
               return true;
@@ -163,6 +171,13 @@
 
         },
 
+        /**
+        * get absolute center of a Connection's instance.   
+        * @name getAbsoluteCenter
+        * @method
+        * @memberof MoLIC.Connection.prototype
+        * @return {Object} position (x,y)
+        */
         getAbsoluteCenter: function(){
             var absCenter = {
                 x: this.getX() + (SIZE / 2),
@@ -172,15 +187,82 @@
             return absCenter;
         },
 
-        updatePositionFromPort: function(port){
-
-            console.log('nao devia chamar mais');
-
+        /**
+        * set connection position according to passed center position
+        * @name setCenterPosition
+        * @method
+        * @memberof MoLIC.Connection.prototype
+        * @param {Object} position
+        */
+        setCenterPosition: function(position){
+            this.setPosition( position.x - ( SIZE / 2 ), position.y - ( SIZE - 2 ) )
         },
 
+
+        /**
+        * update position according to property port. SetPort should be used instead. 
+        * @method updatePositionFromPort
+        * @param port
+        * @deprecated 
+        */
+        updatePositionFromPort: function(){
+            if(this.port){
+                this.setPosition(this.port.getAbsolutePosition().x, this.port.getAbsolutePosition().y);
+            }
+        },
+
+
+
+        /**
+        * highlights or clear highlight according to flag 
+        * @method setHightlight
+        * @param flag 
+        */
+        setHightlight: function(flag){
+
+            // choose color according to flag on
+            var color = (flag ? HIGHLIGHT : FILL);
+
+            this.highlight = flag;
+
+            this.rect.setFill(color);
+
+            this.getLayer().draw();
+        },
+
+
+        /**
+        * set hover state on or off 
+        * @method setHover
+        * @param flag 
+        */
+        setHover: function(flag){
+
+            // choose color according to flag on
+            var color = ( flag ? HOVER : FILL);
+
+            // but it wont change highlight state
+            color =  (this.highlight ? HIGHLIGHT : color );
+
+            this.rect.setFill(color);
+
+            this.getLayer().draw();
+        },
+
+
+        /**
+        * redraw connection and all related objects (i.e. transitions)
+        * @method refresh
+        */
         refresh: function(){
 
-            MoLIC.drawStage();
+            if(this.transition)
+                this.transition.redraw();
+
+            if(this.layer != null ){
+                this.getLayer().draw();    
+            }
+            
         },
 
         /**
@@ -214,29 +296,31 @@
          */
         setPort: function(aPort){
 
+            // changing from a port to other
             if( this.port != null && this.port != aPort ){
+                
+                // remove previous connection from port
                 this.port.removeConnection(this);
-                return;
             }
 
-
+            // if there is a new port to be set
             if( aPort != null ){
+
                 // set connection position to port position
                 this.setPosition(aPort.getAbsolutePosition().x, aPort.getAbsolutePosition().y);
                 
+                // if this port wasnt already connected 
                 if(this.port != aPort)
                     aPort.addConnection(this);
+
             }
 
-            // set this.port
+            // set this.port (Can be null)
             this.port = aPort;
-
-
-            if(this.transition)
-                this.transition.redraw();
             
+            // redraw things again
             this.refresh();
-    
+
         },
 
 

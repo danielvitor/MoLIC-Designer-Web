@@ -96,7 +96,6 @@ Test.Modules.Utterance = {
                 targetConnection: to 
         });
 
-        targetScene.displayPorts(true);
 
         MoLIC.drawStage();
     }

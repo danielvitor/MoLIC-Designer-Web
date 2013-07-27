@@ -4,7 +4,8 @@
     var 
         SCENE = 'Scene',
         WIDTH = 120,
-        HEIGHT = 60;
+        HEIGHT = 60,
+        DEFAULT_TOPIC = "No topic";
         
 
     /**
@@ -44,6 +45,8 @@
             this.border = null;
             this.width = WIDTH;
             this.height = HEIGHT;
+
+            this.highlight = true;
 
             // call super constructor
             Kinetic.Group.call(this, config);
@@ -94,7 +97,35 @@
                 this.getPort(RIGHT).notify("dragmove");
                 this.getPort(BOTTOM).notify("dragmove");
 
+                MoLIC.drawStage();
+
             });
+
+            this.on("dragend", function(e){
+                MoLIC.drawStage();
+            });
+
+
+            this.on("dblclick", function(e){
+
+                var thisScene = e.targetNode.parent;
+
+                sceneTopic = prompt("Topic",thisScene.getName());
+
+                if(sceneTopic === null)
+                {
+                    return;
+                }
+                
+                if(sceneTopic != thisScene.getName()){
+                    thisScene.text.setText(sceneTopic);
+                    thisScene.name = sceneTopic;
+                    MoLIC.drawStage();
+                }
+            });
+            
+
+
         },
         
         _drawPorts: function(){
@@ -111,6 +142,7 @@
             for(index in this.points) { 
                 var port = this.ports[index];
                 this.add(port);
+                port.hide();
             }
 
         },
@@ -124,7 +156,7 @@
             return MoLIC.createPort({
                 'shape': this,
                 'position': position,
-                visible: true
+                visible: false
             });
         },
 

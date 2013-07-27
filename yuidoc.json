@@ -2,11 +2,15 @@
     "name": "MoLIC Designer",
     "description": "molic designer project and documentation",
     "version": "1.0.0",
-    "url": "http://molicDesigner.com/",
+    "url": "http://github.com/danielvitor/MoLIC-Designer-Web",
 	  "options": {
 			"paths": [
-			  "./js"
+			  "./src/diagram/",
+			  "./src/diagram/elements"
 			],
+			"exclude":
+				"./src/diagram/old_shapes"
+			,
 			"outdir": "./dist/docs"
 	  }
 }
