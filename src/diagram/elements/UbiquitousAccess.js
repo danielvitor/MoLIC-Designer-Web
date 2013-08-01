@@ -10,8 +10,6 @@
      * @memberof MoLIC
      * @augments MoLIC.Element
      * @param {Object} config
-     * {{ShapeParams}}
-     * {{NodeParams}}
      * @example
      * var ubiquitousAccess = new MoLIC.UbiquitousAccess({
             x: 10,

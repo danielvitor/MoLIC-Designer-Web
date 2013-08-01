@@ -4,19 +4,7 @@
     var 
         OPENINGPOINT = 'OpeningPoint';
 
-    /**
-     * Scene constructor
-     * @constructor
-     * @memberof MoLIC
-     * @augments MoLIC.Element
-     * @param {Object} config
-     * @param {String} config.name
-     * {{ShapeParams}}
-     * {{NodeParams}}
-     * @example
-     * var startPoint = new MoLIC.StartPoint({
-     * });
-     */
+
     MoLIC.OpeningPoint = function(config) {
         this._initOpeningPoint(config);
         this._draw();

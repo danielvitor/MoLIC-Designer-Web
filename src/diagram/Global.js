@@ -37,8 +37,14 @@ var MoLIC = {};
 	 	MoLIC.stage.add(layer);
  	}
 
- 	MoLIC.promptForText = function(shape, text){
+ 	MoLIC.promptForText = function(shape, text, label){
 
+	    var newText = prompt(label,text);
+
+	    // if did not change the text, should return null
+	    newText = ( newText === text ? null : newText);
+		
+		return newText;
  	}
 
  	MoLIC.autoDrag = function(conn){

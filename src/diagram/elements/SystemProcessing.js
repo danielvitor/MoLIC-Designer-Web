@@ -5,19 +5,7 @@
         SYSTEMPROCESSING = 'SystemProcessing',
         RECTSIZE = 30;
 
-    /**
-     * Scene constructor
-     * @constructor
-     * @memberof MoLIC
-     * @augments MoLIC.Element
-     * @param {Object} config
-     * @param {String} config.name
-     * {{ShapeParams}}
-     * {{NodeParams}}
-     * @example
-     * var startPoint = new MoLIC.StartPoint({
-     * });
-     */
+   
     MoLIC.SystemProcessing = function(config) {
         this._initSystemProcessing(config);
         this._draw();

@@ -4,19 +4,7 @@
     var 
         CLOSINGPOINT = 'ClosingPoint';
 
-    /**
-     * ClosingPoint constructor
-     * @constructor
-     * @memberof MoLIC
-     * @augments MoLIC.Group
-     * @param {Object} config
-     * @param {String} config.name
-     * {{ShapeParams}}
-     * {{NodeParams}}
-     * @example
-     * var closingPoint = new MoLIC.ClosingPoint({
-     * });
-     */
+
     MoLIC.ClosingPoint = function(config) {
         this._initClosingPoint(config);
         this._draw();

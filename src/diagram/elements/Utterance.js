@@ -126,7 +126,7 @@
 
 
             this.text = new Kinetic.Text({
-                text:     "this is a simple text \n to text it.",
+                text:     "this is a simple text \n to test it.",
                 x:   this.center.getX() + this.textOffset.x,
                 y:   this.center.getY() + this.textOffset.y,
                 fontSize: 14,
@@ -264,14 +264,18 @@
             // how long you want the head of the arrow to be, you could calculate this as a fraction of the distance between the points as well.
             var headlen = 15;   
             var angle = Math.atan2(toY-fromY, toX-fromX);
+            var FRAC = 8;
+
+
 
             line = new Kinetic.Line({
                 points: [
                     fromX, fromY, 
                     toX, toY, 
-                    toX-headlen*Math.cos(angle-Math.PI/6), toY-headlen*Math.sin(angle-Math.PI/6),
+                    toX-headlen*Math.cos(angle-Math.PI/FRAC), toY-headlen*Math.sin(angle-Math.PI/FRAC),
                     toX, toY, 
-                    toX-headlen*Math.cos(angle+Math.PI/6), toY-headlen*Math.sin(angle+Math.PI/6)
+                    toX-headlen*Math.cos(angle+Math.PI/FRAC), toY-headlen*Math.sin(angle+Math.PI/FRAC),
+                    toX-headlen*Math.cos(angle-Math.PI/FRAC), toY-headlen*Math.sin(angle-Math.PI/FRAC)
                 ],
                 stroke: FILL,
                 strokeWidth: WIDTH,

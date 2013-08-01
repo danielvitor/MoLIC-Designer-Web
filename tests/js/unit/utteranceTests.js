@@ -1,5 +1,5 @@
 Test.Modules.Utterance = {
-    'add utterance from scene to scene': function(containerId) {
+    '*add utterance from scene to scene': function(containerId) {
         MoLIC.initStage({
             container: containerId,
             width: 600,

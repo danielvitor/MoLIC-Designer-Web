@@ -12,7 +12,6 @@
         
     /**
      * Connection constructor
-     * @constructor
      * @memberof MoLIC
      * @augments Kinetic.Group
      * @param {Object} config
@@ -314,6 +313,18 @@
                     aPort.addConnection(this);
 
             }
+
+
+            if( aPort == null )
+            {
+                this.setOpacity(1);
+            }
+            else
+            {
+                this.setOpacity(0);
+            }
+
+
 
             // set this.port (Can be null)
             this.port = aPort;
